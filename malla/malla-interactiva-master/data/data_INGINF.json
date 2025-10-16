@@ -3,7 +3,6 @@
         ["Fundamento de la Matemática","MAT100-B","1","6","PC",[],"A"],
         ["Introducción a la Ingeniería","EIN412-B","1","5","PC",[],"A"],
         ["Programación","EIN413-B","1","5","PC",[],""],
-        ["Educación Física I","EFI100-T","1",2,"HUM",[],"I"],
         ["Competencias claves para el desarrollo personal","HRW101-B","1","3","HUM",[],"I"],
         ["Inglés I","HCW100-T","1",2,"PC",[],"A"]
     ],
@@ -11,7 +10,6 @@
         ["Introducción al calculo","MAT001_B","1","6","PC",["MAT100-B"],"A"],
         ["Química y Sociedad","QMA001-B","1","5","PC",[],"A"],
         ["Ciencias de la Ingeniería I: Estructura de Datos","EIN423-B","1","6","FI",["EIN413-B"],"P"],
-        ["Educación Física II","EFI101_T","1",2,"HUM",["EFI100-T"],"P"],
         ["Competencias para el desarrollo profesional","HRW102-B","1","3","HUM",["HRW101-B"],"P"],
         ["Inglés II","HCW101-T","1",2,"PC",["HCW100-T"],"A"]
     ],
