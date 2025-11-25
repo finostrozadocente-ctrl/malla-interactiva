@@ -11,7 +11,7 @@
 		["Cálculo I", "SIG-202", 3, 5, "CB", ["SIG-101"], "A"],
 		["Mecánica", "SIG-203", 3, 5, "CB", ["SIG-102"], "A"],
 		["Formación Básica para la Vida Académica II", "SIG-204", 2, 3, "CTS", ["SIG-104"], "A"],
-		["Curso Sello Institucional II: Inglés I", "SIG-205", 2, 3, "CH", ["SIG-105"], "A"]
+		["Curso Sello Institucional II: Inglés II", "SIG-205", 2, 3, "CH", ["SIG-105"], "A"]
 	],
 	"s3": [
 		["Álgebra II", "SIG-301", 3, 5, "CB", ["SIG-201"], "A"],
