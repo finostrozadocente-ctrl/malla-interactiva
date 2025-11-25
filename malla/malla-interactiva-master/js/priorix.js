@@ -209,7 +209,7 @@ class Priorix extends SemesterManager {
         this.calculationsEnabled = false
         let subjectsToUpdate = []
         let backup = this.selectedPerSemester[this.semester]
-        if ((backup === undefined|| backup === []) && this.semester >= Object.values(this.selectedPerSemester).length)
+        if ((backup === undefined|| backup.length === 0) && this.semester >= Object.values(this.selectedPerSemester).length)
             delete this.selectedPerSemester[this.semester]
         else
             backup = [...this.selectedPerSemester[this.semester]]
@@ -225,7 +225,7 @@ class Priorix extends SemesterManager {
             }
             subjectsToUpdate.push(subject)
         })
-        if ((backup !== []))
+        if ((backup !== undefined && backup.length !== 0))
             this.selectedPerSemester[this.semester] = backup
 
         this.semester--

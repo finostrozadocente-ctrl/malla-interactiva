@@ -121,14 +121,14 @@ class SemesterManager {
     // se pasa al semestre anterior
     prevSemester() {
         let backup = this.selectedPerSemester[this.semester]
-        if ((backup === undefined|| backup === []) && this.semester >= Object.values(this.selectedPerSemester).length)
+        if ((backup === undefined|| backup.length === 0) && this.semester >= Object.values(this.selectedPerSemester).length)
             delete this.selectedPerSemester[this.semester]
         else
             backup = [...this.selectedPerSemester[this.semester]]
         this.saveSemesters()
         this.saveEnabled = false
         this.cleanSemester()
-        if ((backup !== undefined && backup !== []))
+        if ((backup !== undefined && backup.length !== 0))
             this.selectedPerSemester[this.semester] = backup
         this.deApprovePrevSemester()
             this.semester--
