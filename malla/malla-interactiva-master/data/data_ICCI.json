@@ -1,82 +1,83 @@
 {
 	"s1": [
-		["Introducción a las Matemáticas", "SIG-101", 3, 5, "CB", [], "A"],
-		["Introducción a la Física", "SIG-102", 3, 5, "CB", [], "A"],
-		["Introducción a la Ingeniería en Computación e Informática", "SIG-103", 3, 5, "ESP", [], "A"],
-		["Formación Básica para la Vida Académica", "SIG-104", 2, 3, "CTS", [], "A"],
-		["Curso Sello Institucional I: Inglés I", "SIG-105", 2, 3, "CH", [], "A"]
+		["Introducción a las Matemáticas", "83500", 6, 7, "CB", [], "A"],
+		["Introducción a la Física", "83501", 6, 7, "CB", [], "A"],
+		["Introducción a la Ingeniería en Computación e Informática", "85000", 14, 9, "ESP", [], "A"],
+		["Curso Sello Institucional I: Inglés I", "82000", 4, 4, "CH", [], "A"],
+		["Formación Básica para la Vida Académica I", "FBVA1", 4, 4, "CTS", [], "A"]
 	],
 	"s2": [
-		["Álgebra I", "SIG-201", 3, 5, "CB", ["SIG-101"], "A"],
-		["Cálculo I", "SIG-202", 3, 5, "CB", ["SIG-101"], "A"],
-		["Mecánica", "SIG-203", 3, 5, "CB", ["SIG-102"], "A"],
-		["Formación Básica para la Vida Académica II", "SIG-204", 2, 3, "CTS", ["SIG-104"], "A"],
-		["Curso Sello Institucional II: Inglés II", "SIG-205", 2, 3, "CH", ["SIG-105"], "A"]
+		["Álgebra I", "83502", 6, 7, "CB", ["83500"], "A"],
+		["Cálculo I", "83503", 6, 7, "CB", [], "A"],
+		["Mecánica", "83504", 6, 7, "CB", ["83501"], "A"],
+		["Curso Sello Institucional II: Inglés II", "82001", 4, 4, "CH", ["82000"], "A"],
+		["Formación Básica para la Vida Académica II", "FBVA2", 4, 4, "CTS", ["FBVA1"], "A"]
 	],
 	"s3": [
-		["Álgebra II", "SIG-301", 3, 5, "CB", ["SIG-201"], "A"],
-		["Cálculo II", "SIG-302", 3, 5, "CB", ["SIG-202"], "A"],
-		["Electricidad y Magnetismo", "SIG-303", 3, 5, "CB", ["SIG-203"], "A"],
-		["Programación Computacional", "SIG-304", 3, 5, "ESP", ["SIG-103"], "A"],
-		["Inglés Comunicacional", "SIG-305", 2, 3, "CH", ["SIG-205"], "A"],
-		["Curso Sello Institucional III", "SIG-306", 2, 3, "CTS", ["SIG-204"], "A"]
+		["Álgebra II", "83505", 6, 5, "CB", ["83502"], "A"],
+		["Cálculo II", "83506", 6, 5, "CB", ["83503"], "A"],
+		["Electricidad y Magnetismo", "83510", 4, 5, "CB", ["83504"], "A"],
+		["Curso Sello Institucional III", "CSIRD3", 4, 4, "CTS", [], "A"],
+		["Inglés Comunicacional", "85001", 6, 5, "CH", ["82001"], "A"],
+		["Programación Computacional", "83512", 6, 5, "ESP", [], "A"]
 	],
 	"s4": [
-		["Ecuaciones Diferenciales", "SIG-401", 3, 5, "CB", ["SIG-302"], "A"],
-		["Cálculo III", "SIG-402", 3, 5, "CB", ["SIG-302"], "A"],
-		["Ondas, Óptica y Calor", "SIG-403", 3, 5, "CB", ["SIG-303"], "A"],
-		["Programación Orientada a Objetos", "SIG-404", 3, 5, "ESP", ["SIG-304"], "A"],
-		["Taller Integrador I", "SIG-405", 3, 5, "CTS", [], "A"],
-		["Curso Sello Institucional IV", "SIG-406", 2, 3, "CTS", ["SIG-306"], "A"]
+		["Ecuaciones Diferenciales", "83508", 6, 5, "CB", ["83506"], "A"],
+		["Cálculo III", "83509", 6, 5, "CB", ["83506"], "A"],
+		["Ondas, Óptica y Calor", "83513", 4, 5, "CB", ["83510"], "A"],
+		["Curso Sello Institucional IV", "CSIRD4", 4, 4, "CTS", [], "A"],
+		["Taller Integrador I", "85002", 8, 5, "CTS", [], "I"],
+		["Programación Orientada a Objetos", "85003", 6, 7, "ESP", ["83512"], "A"]
 	],
 	"s5": [
-		["Probabilidad y Estadística", "SIG-501", 3, 5, "CB", ["SIG-402"], "A"],
-		["Química General", "SIG-502", 3, 5, "CB", [], "A"],
-		["Arquitectura de Computadores", "SIG-503", 3, 5, "ESP", ["SIG-404"], "A"],
-		["Estructura de Datos", "SIG-504", 3, 5, "ESP", ["SIG-404"], "A"],
-		["Administración", "SIG-505", 3, 5, "CSSE", [], "A"],
-		["Interdisciplinar I", "SIG-506", 3, 5, "CTS", [], "A"]
+		["Arquitectura de Computadores", "85004", 4, 5, "ESP", [], "A"],
+		["Probabilidad y Estadística", "83516", 6, 5, "CB", ["83506"], "A"],
+		["Interdisciplinar", "INTR1", 4, 4, "CTS", [], "A"],
+		["Química General", "83518", 6, 7, "CB", [], "A"],
+		["Estructura de datos", "85005", 6, 5, "ESP", ["85003"], "A"],
+		["Administración", "85006", 4, 4, "CSSE", [], "A"]
 	],
 	"s6": [
-		["Métodos Estadísticos", "SIG-601", 3, 5, "CB", ["SIG-501"], "A"],
-		["Fundamentos de Economía", "SIG-602", 3, 5, "CSSE", [], "A"],
-		["Sistemas Operativos", "SIG-603", 3, 5, "ESP", ["SIG-503"], "A"],
-		["Bases de Datos", "SIG-604", 3, 5, "ESP", ["SIG-504"], "A"],
-		["Complejidad de Algoritmos", "SIG-605", 3, 5, "ESP", ["SIG-504"], "A"],
-		["Interdisciplinar II: AFS", "SIG-606", 3, 5, "CTS", ["SIG-506"], "A"]
+		["Métodos Estadísticos", "85007", 6, 5, "CB", ["83516"], "A"],
+		["Fundamentos de Economía", "85008", 4, 4, "CSSE", ["85006"], "A"],
+		["Bases de Datos", "85009", 7, 6, "ESP", ["85002"], "A"],
+		["Sistemas Operativos", "85010", 7, 6, "ESP", ["85004"], "A"],
+		["Interdisciplinar A+S", "INTR2", 6, 4, "CTS", ["INTR1"], "A"],
+		["Complejidad de Algoritmos", "85011", 6, 5, "ESP", ["85005"], "A"]
 	],
 	"s7": [
-		["Investigación Operativa", "SIG-701", 3, 5, "ESP", ["SIG-601"], "A"],
-		["Contabilidad y Costos", "SIG-702", 3, 5, "CSSE", ["SIG-602"], "A"],
-		["Ciberseguridad", "SIG-703", 3, 5, "ESP", ["SIG-603"], "A"],
-		["Redes de Datos y Sistemas Distribuidos", "SIG-704", 3, 5, "ESP", ["SIG-603"], "A"],
-		["Análisis y Diseño de Sistemas de Información", "SIG-705", 3, 5, "ESP", ["SIG-604"], "A"]
+		["Análisis y diseño de sistemas de información", "85012", 8, 7, "ESP", ["85003"], "A"],
+		["Contabilidad y costos", "85013", 7, 6, "CSSE", ["85008"], "A"],
+		["Tópicos avanzados de datos", "85014", 7, 6, "ESP", ["85009"], "A"],
+		["Redes de datos y sistemas distribuidos", "85015", 7, 6, "ESP", ["85010"], "A"],
+		["Investigación operativa", "83519", 6, 5, "ESP", [], "A"]
 	],
 	"s8": [
-		["Evaluación de Proyectos", "SIG-801", 3, 5, "CSSE", ["SIG-701"], "A"],
-		["Automatización", "SIG-802", 3, 5, "ESP", ["SIG-703"], "A"],
-		["Tópicos Avanzados de Datos", "SIG-803", 3, 5, "ESP", ["SIG-704"], "A"],
-		["Taller Integrador II", "SIG-804", 3, 5, "CTS", ["SIG-405", "SIG-705"], "A"],
-		["Ingeniería de Software", "SIG-805", 3, 5, "ESP", ["SIG-705"], "A"]
+		["Ciberseguridad", "85016", 5, 5, "ESP", ["85015"], "A"],
+		["Minería de datos", "85017", 5, 5, "ESP", ["85014"], "A"],
+		["Automatización", "85018", 5, 5, "ESP", [], "A"],
+		["Evaluación de proyectos", "83517", 8, 7, "CSSE", ["85013"], "A"],
+		["Taller Integrador II", "85019", 5, 3, "CTS", [], "I"],
+		["Ingeniería de Software", "85020", 5, 5, "ESP", ["85012"], "A"]
 	],
 	"s9": [
-		["Innovación y Emprendimiento", "SIG-901", 3, 5, "CSSE", ["SIG-801"], "A"],
-		["Inteligencia Artificial", "SIG-902", 3, 5, "ESP", ["SIG-802"], "A"],
-		["Minería de Datos", "SIG-903", 3, 5, "ESP", ["SIG-803"], "A"],
-		["Gestión de Calidad de Software", "SIG-904", 3, 5, "ESP", ["SIG-805"], "A"],
-		["Práctica Operacional", "SIG-905", 0, 0, "ESP", [], "A"]
+		["Tecnologías Emergentes", "85021", 4, 4, "ESP", [], "A"],
+		["Proyecto Big Data", "85022", 7, 4, "ESP", ["85017"], "A"],
+		["Inteligencia Artificial", "85023", 7, 4, "ESP", ["85018"], "A"],
+		["Gestión de calidad de software", "85024", 7, 5, "ESP", ["85020"], "A"],
+		["Innovación y emprendimiento", "85025", 4, 4, "CSSE", [], "A"],
+		["Práctica Operacional", "85026", 22, 11, "ESP", [], "P"]
 	],
 	"s10": [
-		["Proyecto de Título I", "SIG-1001", 5, 8, "ESP", ["SIG-901", "SIG-902", "SIG-903"], "A"],
-		["Sistemas Inteligentes", "SIG-1002", 3, 5, "ESP", ["SIG-902"], "A"],
-		["Proyecto Big Data", "SIG-1003", 3, 5, "ESP", ["SIG-903"], "A"],
-		["Ingeniería y Gobierno de Informática", "SIG-1004", 3, 5, "ESP", ["SIG-904"], "A"]
+		["Proyecto de Título I", "85027", 12, 7, "ESP", [], "A"],
+		["Ingeniería y Gobierno de datos", "85028", 10, 7, "ESP", ["85022"], "A"],
+		["Sistemas Inteligentes", "85029", 10, 7, "ESP", ["85023"], "A"],
+		["Dirección y evaluación de Proyectos informáticos", "85030", 10, 7, "ESP", ["85024"], "A"]
 	],
 	"s11": [
-		["Proyecto de Título II", "SIG-1101", 5, 8, "ESP", ["SIG-1001"], "A"],
-		["Gestión y Planificación Estratégica", "SIG-1102", 3, 5, "CSSE", ["SIG-1004"], "A"],
-		["Proyecto de Informática", "SIG-1103", 3, 5, "ESP", ["SIG-1003"], "A"],
-		["Dirección y Evaluación de Proyectos Informáticos", "SIG-1104", 3, 5, "ESP", ["SIG-1004"], "A"],
-		["Práctica Profesional", "SIG-1105", 0, 0, "ESP", [], "A"]
+		["Proyecto de Título II", "85031", 24, 12, "ESP", ["85027"], "I"],
+		["Proyecto de Informática", "85032", 3, 3, "ESP", [], "A"],
+		["Gestión y planificación estratégica", "85033", 4, 4, "CSSE", [], "A"],
+		["Práctica profesional", "85034", 22, 11, "ESP", ["85026"], "P"]
 	]
 }

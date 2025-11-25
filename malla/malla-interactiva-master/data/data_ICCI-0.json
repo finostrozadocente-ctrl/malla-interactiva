@@ -27,7 +27,7 @@
 		["Cálculo III", "3327", 6, 6, "CB", ["3231"], "A"],
 		["Arquitectura de Computadores", "3344", 6, 6, "ESP", ["3335"], "A"],
 		["Fundamentos de Lenguajes de Programación", "3329", 4, 4, "ESP", ["19076"], "A"],
-		["Curso Transversal Institucional I", "CTS-101", 2, 2, "CTS", [], "A"],
+		["Curso Transversal Institucional I", "3348", 2, 2, "CTS", [], "A"],
 		["Inglés para Ingeniería II", "3338", 3, 3, "CH", ["3330"], "A"],
 		["Taller Integrador I", "19085", 3, 3, "CTS", [], "A"]
 	],
@@ -48,7 +48,7 @@
 	],
 	"s7": [
 		["Investigación Operativa I", "58005", 6, 6, "ESP", ["3230"], "A"],
-		["Contabilidad y Costos", "4883", 6, 6, "CSSE", ["3225"], "A"],
+		["Contabilidad y Costos", "4883", 6, 6, "CSSE", ["3334"], "A"],
 		["Arquitectura de Software", "19064", 6, 6, "ESP", ["3341"], "A"],
 		["Automatización", "19063", 6, 6, "ESP", ["3344"], "A"],
 		["Tópicos Avanzados de Datos", "3355", 6, 6, "ESP", ["3347"], "A"],
@@ -57,30 +57,30 @@
 	"s8": [
 		["Simulación", "58011", 6, 6, "ESP", ["58005"], "A"],
 		["Ingeniería de Software", "3364", 6, 6, "ESP", ["19064"], "A"],
-		["Inteligencia Artificial", "19068", 6, 6, "ESP", [], "A"],
-		["Programación de Aplicaciones", "19086", 7, 7, "ESP", [], "A"],
-		["Curso Transversal Institucional II", "CTS-201", 2, 2, "CTS", [], "A"],
-		["Taller Integrador II", "19080", 3, 3, "CTS", [], "A"]
+		["Inteligencia Artificial", "19068", 6, 6, "ESP", ["3340", "3328"], "A"],
+		["Programación de Aplicaciones", "19086", 7, 7, "ESP", ["19064"], "A"],
+		["Curso Transversal Institucional II", "3350", 2, 2, "CTS", ["3348"], "A"],
+		["Taller Integrador II", "19080", 3, 3, "CTS", ["19085", "3341"], "A"]
 	],
 	"s9": [
-		["Innovación y Emprendimiento", "4858", 4, 4, "CSSE", [], "A"],
+		["Innovación y Emprendimiento", "4858", 4, 4, "CSSE", ["4827"], "A"],
 		["Evaluación de Proyectos", "4847", 6, 6, "CSSE", ["4883"], "A"],
 		["Gestión de Calidad de Software", "3783", 7, 7, "ESP", ["3364"], "A"],
 		["Sistemas Inteligentes", "19081", 7, 7, "ESP", ["19068"], "A"],
 		["Electivo de Especialización Profesional I", "3780", 6, 6, "ELEC", ["19080"], "A"],
-		["Práctica Profesional", "3785", 0, 0, "ESP", [], "I"]
+		["Práctica Profesional", "3785", 0, 0, "ESP", ["3352"], "I"]
 	],
 	"s10": [
 		["Dirección y Evaluación de Proyectos Informáticos", "19082", 7, 7, "ESP", ["4847"], "A"],
 		["Seguridad Informática", "19008", 7, 7, "ESP", ["19065"], "A"],
 		["Electivo de Especialización Profesional II", "3782", 6, 6, "ELEC", ["19080"], "A"],
 		["Ética y Moral Profesional", "19071", 3, 3, "CH", ["19080"], "A"],
-		["Proyecto de Título I", "19537", 7, 7, "ESP", [], "A"]
+		["Proyecto de Título I", "19537", 7, 7, "ESP", ["19080"], "I"]
 	],
 	"s11": [
-		["Planificación Estratégica", "4856", 6, 6, "CSSE", [], "A"],
+		["Planificación Estratégica", "4856", 6, 6, "CSSE", ["4847"], "A"],
 		["Electivo de Especialización Profesional III", "3787", 6, 6, "ELEC", ["19080"], "A"],
 		["Minería de Datos", "19083", 5, 5, "ESP", ["3355"], "A"],
-		["Proyecto de Título II", "19541", 13, 13, "ESP", ["19537"], "A"]
+		["Proyecto de Título II", "19541", 13, 13, "ESP", ["19537"], "I"]
 	]
 }
