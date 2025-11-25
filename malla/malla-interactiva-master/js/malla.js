@@ -41,7 +41,18 @@ class Malla {
     // Se explica solo
     enableCreditsStats() {
         this.showCreditStats = true
+        // Lógica para establecer el sistema de créditos actual (A o SCT)
+        if (this.sct) {
+            // Si el parámetro 'SCT' está en la URL
+            document.getElementById('credits-system').innerHTML = 'SCT'
+            document.getElementById('creditsExample').innerHTML = 'Créditos SCT'
+        } else {
+            // Si no está, usa el sistema por defecto
+            document.getElementById('credits-system').innerHTML = 'A'
+            document.getElementById('creditsExample').innerHTML = 'Créditos A'
+        }
     }
+    
 
     // Se explica solo
     enableCreditsSystem() {
@@ -347,7 +358,7 @@ class Malla {
     displayCreditSystem() {
         if (!this.showCreditSystem)
             return
-        d3.select("#credits-system").text(this.sct ? 'SCT' : 'USM')
+        d3.select("#credits-system").text(this.sct ? 'SCT' : 'A')
     }
 
     // Actualiza los datos como porcentaje de ramos aprobados etc

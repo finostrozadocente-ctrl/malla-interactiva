@@ -411,7 +411,7 @@ class MallaEditor {
         subject.prer = new Set(this.subjectModalPrer)
         subject.dictatesIn = modal.querySelector('#dictatesIn').value;
 
-        let creditsUSM = modal.querySelector("#custom-creditsa-USM").value
+        let creditsA = modal.querySelector("#custom-creditsa-USM").value
         let creditsSCT = modal.querySelector("#custom-creditsa-SCT").value
         if (creditsSCT.length === 0)
             creditsSCT = null

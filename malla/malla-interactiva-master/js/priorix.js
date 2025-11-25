@@ -7,21 +7,21 @@ class Priorix extends SemesterManager {
 
         // {USM : {1 : numero, 2: otroNumero, ...}}, SCT : {...}}
         this.prevSemesterSums = {
-            'USM': {},
+            'A': {},
             'SCT': {}
         }
         this.currentSemesterSum = {
-            'USM': 0,
+            'A': 0,
             'SCT': 0
         }
         this.totalCredits = {
-            'USM': 0,
+            'A': 0,
             'SCT': 0
         }
 
-        // {USM : {1 : numero, 2: otroNumero, ...}}, SCT : {...}}
+        // {A : {1 : numero, 2: otroNumero, ...}}, SCT : {...}}
         this.totalApprovedCredits = {
-            'USM': {},
+            'A': {},
             'SCT': {}
         }
 
@@ -39,7 +39,7 @@ class Priorix extends SemesterManager {
 
     addSubject(subject) {
         super.addSubject(subject);
-        this.totalCredits['USM'] = this.totalCredits['USM'] + subject.getUSMCredits()
+        this.totalCredits['A'] = this.totalCredits['A'] + subject.getUSMCredits()
         this.totalCredits['SCT'] = this.totalCredits['SCT'] + subject.getSCTCredits()
         this.calculate()
 
@@ -47,7 +47,7 @@ class Priorix extends SemesterManager {
 
     removeSubject(subject) {
         super.removeSubject(subject);
-        this.totalCredits['USM'] = this.totalCredits['USM'] - subject.getUSMCredits()
+        this.totalCredits['A'] = this.totalCredits['A'] - subject.getUSMCredits()
         this.totalCredits['SCT'] = this.totalCredits['SCT'] - subject.getSCTCredits()
         this.calculate()
 
@@ -63,7 +63,7 @@ class Priorix extends SemesterManager {
                     this.selectedPerSemester[semester].splice(found,1)
                     if (semester < this.semester) {
                         subject.approveRamo()
-                        this.totalCredits["USM"] -= subject.getUSMCredits()
+                        this.totalCredits["A"] -= subject.getUSMCredits()
                         this.totalCredits["SCT"] -= subject.getSCTCredits()
 
                         let grade = this.subjectGrades[semester][subject.sigla]
@@ -72,10 +72,10 @@ class Priorix extends SemesterManager {
                         delete this.subjectGrades[semester][subject.sigla]
                         for (semester; semester < this.semester; semester++) {
                             if (grade > 54) {
-                                this.totalApprovedCredits["USM"][semester] -= subject.getUSMCredits()
+                                this.totalApprovedCredits["A"][semester] -= subject.getUSMCredits()
                                 this.totalApprovedCredits["SCT"][semester] -= subject.getSCTCredits()
                             }
-                            this.prevSemesterSums["USM"][semester] -= scoreToDeleteUSM
+                            this.prevSemesterSums["A"][semester] -= scoreToDeleteUSM
                             this.prevSemesterSums["SCT"][semester] -= scoreToDeleteSCT
                         }
                     }
@@ -267,19 +267,19 @@ class Priorix extends SemesterManager {
             1: 1
         }
         this.prevSemesterSums = {
-            'USM': {},
+            'A': {},
             'SCT': {}
         }
         this.currentSemesterSum = {
-            'USM': 0,
+            'A': 0,
             'SCT': 0
         }
         this.totalCredits = {
-            'USM': 0,
+            'A': 0,
             'SCT': 0
         }
         this.totalApprovedCredits = {
-            'USM': {},
+            'A': {},
             'SCT': {}
         }
         this.subjectGrades = {}
@@ -382,10 +382,10 @@ class Priorix extends SemesterManager {
             let currentSemesterSumUSM, currentSemesterSumSCT
             let semesterGrades = {}
             if (this.semester !== 1) {
-                currentApprovedCreditsUSM = this.totalApprovedCredits["USM"][this.semester - 1]
+                currentApprovedCreditsUSM = this.totalApprovedCredits["A"][this.semester - 1]
                 currentApprovedCreditsSCT = this.totalApprovedCredits["SCT"][this.semester - 1]
 
-                currentSemesterSumUSM = this.prevSemesterSums["USM"][this.semester - 1]
+                currentSemesterSumUSM = this.prevSemesterSums["A"][this.semester - 1]
                 currentSemesterSumSCT = this.prevSemesterSums["SCT"][this.semester - 1]
             } else {
                 currentApprovedCreditsUSM = 0
@@ -417,10 +417,10 @@ class Priorix extends SemesterManager {
             this.card.select('.resSCT').text(resultSCT)
             // save results
             this.subjectGrades[this.semester] = semesterGrades
-            this.currentSemesterSum["USM"] = currentSemesterSumUSM
+            this.currentSemesterSum["A"] = currentSemesterSumUSM
             this.currentSemesterSum["SCT"] = currentSemesterSumSCT
             this.faes[this.semester] = fae
-            this.totalApprovedCredits["USM"][this.semester] = currentApprovedCreditsUSM
+            this.totalApprovedCredits["A"][this.semester] = currentApprovedCreditsUSM
             this.totalApprovedCredits["SCT"][this.semester] = currentApprovedCreditsSCT
             //console.log(this.totalApprovedCredits, this.totalCredits, this.prevSemesterSums, this.currentSemesterSum, this.subjectGrades)
             this.saveSemesters()
