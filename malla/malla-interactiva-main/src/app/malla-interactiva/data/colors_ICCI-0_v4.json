@@ -1,0 +1,8 @@
+{
+  "CB": ["#6f42c1", "Ciencias Básicas"],
+  "ESP": ["#007bff", "Especialidad"],
+  "CH": ["#28a745", "Humanista y Sellos"],
+  "CSSE": ["#fd7e14", "Sociales y Económicas"],
+  "CTS": ["#17a2b8", "Transversales"],
+  "ELEC": ["#dc3545", "Electivos"]
+}

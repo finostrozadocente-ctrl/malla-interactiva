@@ -79,5 +79,6 @@
 		["Proyecto de Informática", "85032", 3, 3, "ESP", [], "A"],
 		["Gestión y planificación estratégica", "85033", 4, 4, "CSSE", [], "A"],
 		["Práctica profesional", "85034", 22, 11, "ESP", ["85026"], "P"]
-	]
+	],
+	"s12": []
 }

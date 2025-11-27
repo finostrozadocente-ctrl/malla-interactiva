@@ -16,14 +16,14 @@
     },
 });*/
 
-(function () { // comment out this if needed
+/*(function () { // comment out this if needed
   const allowedHosts = ['localhost', 'booterman98.github.io']; 
   const currentHost = window.location.hostname;
 
   if (!allowedHosts.includes(currentHost)) {
     window.location.href = 'https://booterman98.github.io/malla-interactiva/';
   }
-})();
+})();*/
 
 let vh = window.innerHeight * 0.01;
 // Then we set the value in the --vh custom property to the root of the document
@@ -88,7 +88,7 @@ if (carr) {
 
 
 if (!carr)
-    carr = 'INF'
+    carr = 'ICCI'
 
 let sct = true
 if (params.get('SCT') === "false")
