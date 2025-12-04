@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malla ICCI - Ajuste Perfecto</title>
+    <style>
+        :root {
+            /* --- PALETA DE COLORES --- */
+            --col-cb-peach: #f9cb9c;        
+            --col-esp-orange: #f47c3e;      
+            --col-app-grey: #a6a6a6;        
+            --col-human-lightgrey: #d9d9d9; 
+            
+            --bg-body: #fdfdfd;
+            --header-year: #444;
+            
+            --text-on-dark: #fff;
+            --text-on-light: #333;
+
+            /* RELACIONES */
+            --outline-req-red: #ff0000;
+            --outline-unlock-green: #00ff00;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-body);
+            margin: 0;
+            padding: 10px; /* Reduje padding externo */
+            color: #333;
+            overflow: hidden; /* Ocultar scroll global */
+            height: 100vh;
+            width: 100vw;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- CABECERA (Flex Shrink para que no se aplaste pero ocupe lo justo) --- */
+        .header-container { 
+            text-align: center; 
+            margin-bottom: 10px; 
+            flex-shrink: 0; 
+        }
+        
+        /* Título más compacto */
+        h1 { margin: 0 0 5px 0; color: #333; font-size: 1.4rem; }
+
+        .controls-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 5px;
+        }
+
+        .malla-selector {
+            display: inline-flex;
+            background: #eee;
+            border-radius: 15px;
+            padding: 3px;
+        }
+
+        .btn-malla {
+            padding: 6px 20px;
+            border: none;
+            border-radius: 12px;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 700;
+            color: #666;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        .btn-malla.active {
+            background: var(--col-esp-orange);
+            color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* --- LEYENDA COMPACTA --- */
+        .legend-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            font-size: 0.75rem; /* Texto más pequeño */
+            color: #555;
+            background: #f4f4f4;
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-flex; /* Para que se ajuste al contenido */
+        }
+        .legend-item { display: flex; align-items: center; }
+        .legend-box {
+            width: 12px; height: 12px;
+            margin-right: 5px;
+            border-radius: 2px;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .box-cb { background-color: var(--col-cb-peach); }
+        .box-esp { background-color: var(--col-esp-orange); }
+        .box-app { background-color: var(--col-app-grey); }
+        .box-hum { background-color: var(--col-human-lightgrey); }
+
+
+        /* --- VIEWPORT (Área Flexible) --- */
+        .viewport {
+            flex-grow: 1; /* Ocupa todo el espacio restante verticalmente */
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            background: white;
+            /* Centrar contenido */
+            display: flex;
+            justify-content: center;
+            align-items: center; 
+        }
+
+        .scalable-wrapper {
+            /* No usamos absolute para permitir centrado flex, 
+               pero transform-origin debe ser center center ahora */
+            transform-origin: center center;
+            transition: transform 0.4s ease-out;
+        }
+
+        .main-grid {
+            display: flex;
+            gap: 15px;
+            padding: 20px;
+            width: max-content; /* El ancho depende del contenido */
+        }
+
+        /* --- BLOQUES --- */
+        .year-block {
+            display: flex;
+            flex-direction: column;
+            width: 260px; /* Un poco más angosto para ayudar al fit */
+            background: #fff;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .year-header {
+            background-color: var(--header-year);
+            color: white;
+            text-align: center;
+            padding: 6px 0;
+            font-weight: 800;
+            font-size: 1rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s;
+        }
+        .year-header:hover { background-color: #222; }
+
+        .year-semesters {
+            display: flex;
+            gap: 5px;
+            padding: 5px;
+            background: #f8f8f8;
+            flex-grow: 1;
+        }
+
+        .semester-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-width: 115px;
+        }
+
+        .semester-label {
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #888;
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 4px;
+            padding-bottom: 2px;
+            cursor: pointer;
+            transition: color 0.2s;
+            user-select: none;
+        }
+        .semester-label:hover { color: var(--col-esp-orange); border-color: var(--col-esp-orange); }
+
+        /* --- TARJETAS --- */
+        .ramo {
+            position: relative;
+            height: 85px; /* Un poco más bajas */
+            width: 100%;
+            padding: 4px;
+            box-sizing: border-box;
+            font-size: 10px; /* Letra un poco más chica */
+            cursor: pointer;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s, filter 0.2s;
+        }
+        
+        .ramo:hover { 
+            transform: scale(1.05); 
+            z-index: 100; 
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2); 
+        }
+
+        .ramo.locked { opacity: 0.35; filter: grayscale(0.9); cursor: not-allowed; }
+        .ramo.available { opacity: 1; box-shadow: 0 0 0 2px rgba(0,0,0,0.1); }
+        .ramo.approved::after {
+            content: "✓"; position: absolute; top: -5px; right: -5px;
+            background: #28a745; color: white; width: 18px; height: 18px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: bold; border: 2px solid white; font-size: 10px;
+        }
+
+        /* Highlight Visibilidad */
+        .highlight-prereq, .highlight-next { opacity: 1 !important; filter: none !important; z-index: 50; transform: scale(1.05) !important; }
+        .highlight-prereq { box-shadow: 0 0 0 3px var(--outline-req-red), 0 0 15px rgba(255,0,0,0.4) !important; }
+        .highlight-next { box-shadow: 0 0 0 3px var(--outline-unlock-green), 0 0 15px rgba(0,255,0,0.4) !important; }
+
+        .ramo-top { display: flex; justify-content: space-between; align-items: center; }
+        .ramo-name { text-align: center; font-weight: 600; line-height: 1.2; flex-grow: 1; display: flex; align-items: center; justify-content: center; }
+
+        .ramo.light-text { color: var(--text-on-dark); }
+        .ramo.light-text .ramo-sigla { background: rgba(0,0,0,0.2); padding: 1px 3px; border-radius: 3px; font-size: 8px; }
+        .ramo.light-text .ramo-credits { background: white; color: #333; width: 14px; height: 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 9px; }
+
+        .ramo.dark-text { color: var(--text-on-light); }
+        .ramo.dark-text .ramo-sigla { background: rgba(255,255,255,0.5); padding: 1px 3px; border-radius: 3px; font-size: 8px; color: #333; }
+        .ramo.dark-text .ramo-credits { background: #444; color: white; width: 14px; height: 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 9px; }
+
+        /* BARRA INFERIOR */
+        .stats-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: #fff; border-top: 1px solid #ccc;
+            padding: 8px 20px; display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.05); z-index: 200;
+            flex-shrink: 0;
+            height: 40px; /* Altura fija para cálculo */
+            box-sizing: border-box;
+        }
+        .btn-reset { padding: 5px 15px; background: #d32f2f; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
+
+    </style>
+</head>
+<body>
+
+    <div class="header-container" id="headerContainer">
+        <h1>Malla Curricular ICCI</h1>
+        
+        <div class="controls-row">
+            <div class="malla-selector">
+                <button class="btn-malla active" onclick="app.loadPlan('2017')">Plan 2017</button>
+                <button class="btn-malla" onclick="app.loadPlan('2024')">Plan 2024</button>
+            </div>
+
+            <div class="legend-container">
+                <div class="legend-item"><div class="legend-box box-cb"></div> Ciencias Básicas</div>
+                <div class="legend-item"><div class="legend-box box-esp"></div> Ciencias de la Ingeniería</div>
+                <div class="legend-item"><div class="legend-box box-app"></div> Ingeniería Aplicada</div>
+                <div class="legend-item"><div class="legend-box box-hum"></div> Ciencias sociales y Humanidades</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="viewport" id="viewport">
+        <div class="scalable-wrapper" id="scalableWrapper">
+            <div class="main-grid" id="mainGrid"></div>
+        </div>
+    </div>
+
+    <div class="stats-bar" id="statsBar">
+        <div>
+            <strong id="lbl-plan" style="color:var(--col-esp-orange)">Plan 2017</strong> | 
+            Créditos: <span id="lbl-credits">0</span>
+        </div>
+        <div>
+            Progreso: <strong id="lbl-progress" style="font-size:1.1em">0%</strong>
+            <button class="btn-reset" onclick="app.reset()">Reiniciar</button>
+        </div>
+    </div>
+
+<script>
+    // =========================================================
+    // 1. DATA
+    // =========================================================
+    const MALLA_DATA = {
+        "planes": {
+            "2017": [
+                { "id": "MAT1", "name": "Introducción a las Matemáticas", "s": 1, "c": 6, "cat": "CB", "pre": [] },
+                { "id": "FIS1", "name": "Introducción a la Física", "s": 1, "c": 6, "cat": "CB", "pre": [] },
+                { "id": "INTRO", "name": "Introducción a la Ingeniería", "s": 1, "c": 4, "cat": "ESP", "pre": [] },
+                { "id": "PROG1", "name": "Programación Computacional", "s": 1, "c": 6, "cat": "ESP", "pre": [] },
+                { "id": "ADM", "name": "Administración", "s": 1, "c": 4, "cat": "ESP", "pre": [] },
+                { "id": "EST", "name": "Estrategias de Aprendizaje", "s": 1, "c": 4, "cat": "CH", "pre": [] },
+                { "id": "ALG1", "name": "Álgebra I", "s": 2, "c": 6, "cat": "CB", "pre": ["MAT1"] },
+                { "id": "CAL1", "name": "Cálculo I", "s": 2, "c": 6, "cat": "CB", "pre": ["MAT1"] },
+                { "id": "MEC", "name": "Mecánica", "s": 2, "c": 6, "cat": "CB", "pre": ["FIS1"] },
+                { "id": "QUI", "name": "Química General", "s": 2, "c": 6, "cat": "CB", "pre": [] },
+                { "id": "POO", "name": "Programación Orientada a Objeto", "s": 2, "c": 6, "cat": "ESP", "pre": ["PROG1"] },
+                { "id": "ALG2", "name": "Álgebra II", "s": 3, "c": 6, "cat": "CB", "pre": ["ALG1"] },
+                { "id": "CAL2", "name": "Cálculo II", "s": 3, "c": 6, "cat": "CB", "pre": ["CAL1"] },
+                { "id": "EYM", "name": "Electricidad y Magnetismo", "s": 3, "c": 6, "cat": "CB", "pre": ["MEC"] },
+                { "id": "DIG", "name": "Sistemas Digitales", "s": 3, "c": 6, "cat": "ESP", "pre": [] },
+                { "id": "ING1", "name": "Inglés para Ingeniería I", "s": 3, "c": 4, "cat": "CH", "pre": [] },
+                { "id": "COM", "name": "Estrategias de Comunicación", "s": 3, "c": 4, "cat": "CH", "pre": ["EST"] },
+                { "id": "EDO", "name": "Ecuaciones Diferenciales", "s": 4, "c": 6, "cat": "CB", "pre": ["CAL2"] },
+                { "id": "CAL3", "name": "Cálculo III", "s": 4, "c": 6, "cat": "CB", "pre": ["CAL2"] },
+                { "id": "ARQ", "name": "Arquitectura de Computadores", "s": 4, "c": 6, "cat": "ESP", "pre": ["DIG"] },
+                { "id": "FLP", "name": "Fundam. Lenguaje de Programación", "s": 4, "c": 6, "cat": "ESP", "pre": ["POO"] },
+                { "id": "ING2", "name": "Inglés para Ingeniería II", "s": 4, "c": 4, "cat": "CH", "pre": ["ING1"] },
+                { "id": "CTI1", "name": "Curso Transv. Inst. I", "s": 4, "c": 2, "cat": "CH", "pre": [] },
+                { "id": "TALL1", "name": "Taller Integrador I", "s": 4, "c": 3, "cat": "ESP", "pre": [] },
+                { "id": "OND", "name": "Ondas, Óptica y Calor", "s": 5, "c": 6, "cat": "CB", "pre": ["EYM"] },
+                { "id": "ECO", "name": "Fundamentos de Economía", "s": 5, "c": 4, "cat": "CSSE", "pre": ["ADM"] },
+                { "id": "SIS", "name": "Teoría de Sistemas", "s": 5, "c": 6, "cat": "ESP", "pre": ["INTRO"] },
+                { "id": "SO", "name": "Sistemas Operativos", "s": 5, "c": 6, "cat": "ESP", "pre": ["ARQ"] },
+                { "id": "EDD", "name": "Estructura de Datos", "s": 5, "c": 6, "cat": "ESP", "pre": ["FLP"] },
+                { "id": "INGC", "name": "Inglés Comunicacional", "s": 5, "c": 4, "cat": "CH", "pre": ["ING2"] },
+                { "id": "PROB", "name": "Probabilidades y Estadística", "s": 6, "c": 6, "cat": "CB", "pre": ["CAL3"] },
+                { "id": "ANA", "name": "Análisis y Diseño de Sist. Info", "s": 6, "c": 6, "cat": "ESP", "pre": ["SIS"] },
+                { "id": "RED", "name": "Redes de Datos y Sist. Dist.", "s": 6, "c": 6, "cat": "ESP", "pre": ["SO"] },
+                { "id": "COMP", "name": "Complejidad de Algoritmos", "s": 6, "c": 6, "cat": "ESP", "pre": ["EDD"] },
+                { "id": "BD", "name": "Bases de Datos", "s": 6, "c": 6, "cat": "ESP", "pre": ["EDD"] },
+                { "id": "INV1", "name": "Investigación Operativa I", "s": 7, "c": 6, "cat": "ESP", "pre": ["PROB"] },
+                { "id": "CONT", "name": "Contabilidad y Costos", "s": 7, "c": 4, "cat": "CSSE", "pre": ["ECO"] },
+                { "id": "ARQS", "name": "Arquitectura de Software", "s": 7, "c": 6, "cat": "ESP", "pre": ["ANA"] },
+                { "id": "AUTO", "name": "Automatización", "s": 7, "c": 5, "cat": "ESP", "pre": [] },
+                { "id": "TOP", "name": "Tópicos Avanzados de Datos", "s": 7, "c": 6, "cat": "ESP", "pre": ["BD"] },
+                { "id": "SIM", "name": "Simulación", "s": 8, "c": 6, "cat": "ESP", "pre": ["PROB"] },
+                { "id": "IS", "name": "Ingeniería de Software", "s": 8, "c": 6, "cat": "ESP", "pre": ["ARQS"] },
+                { "id": "IA", "name": "Inteligencia Artificial", "s": 8, "c": 6, "cat": "ESP", "pre": ["TOP"] },
+                { "id": "APP", "name": "Programación de Aplicaciones", "s": 8, "c": 6, "cat": "ESP", "pre": ["BD"] },
+                { "id": "CTI2", "name": "Curso Transv. Inst. II", "s": 8, "c": 2, "cat": "CH", "pre": ["CTI1"] },
+                { "id": "TALL2", "name": "Taller Integrador II", "s": 8, "c": 3, "cat": "ESP", "pre": ["TALL1"] },
+                { "id": "INN", "name": "Innovación y Emprendimiento", "s": 9, "c": 4, "cat": "CSSE", "pre": ["CONT"] },
+                { "id": "EVAL", "name": "Evaluación de Proyectos", "s": 9, "c": 6, "cat": "CSSE", "pre": ["CONT"] },
+                { "id": "GCAL", "name": "Gestión de Calidad de Software", "s": 9, "c": 5, "cat": "ESP", "pre": ["IS"] },
+                { "id": "SINT", "name": "Sistemas Inteligentes", "s": 9, "c": 6, "cat": "ESP", "pre": ["IA"] },
+                { "id": "ELEC1", "name": "Electivo Especialización I", "s": 9, "c": 5, "cat": "ESP", "pre": [] },
+                { "id": "DIR", "name": "Dirección Proy. Informáticos", "s": 10, "c": 6, "cat": "CSSE", "pre": ["EVAL"] },
+                { "id": "SEG", "name": "Seguridad Informática", "s": 10, "c": 6, "cat": "ESP", "pre": ["RED"] },
+                { "id": "ELEC2", "name": "Electivo Especialización II", "s": 10, "c": 5, "cat": "ESP", "pre": ["ELEC1"] },
+                { "id": "TIT1", "name": "Proyecto de Título I", "s": 10, "c": 6, "cat": "ESP", "pre": ["TALL2"] },
+                { "id": "ETICA", "name": "Ética y Moral Profesional", "s": 10, "c": 3, "cat": "CH", "pre": [] },
+                { "id": "PLAN", "name": "Planificación Estratégica", "s": 11, "c": 6, "cat": "CSSE", "pre": ["DIR"] },
+                { "id": "ELEC3", "name": "Electivo Especialización III", "s": 11, "c": 5, "cat": "ESP", "pre": ["ELEC2"] },
+                { "id": "MIN", "name": "Minería de Datos", "s": 11, "c": 6, "cat": "ESP", "pre": ["BD"] },
+                { "id": "TIT2", "name": "Proyecto de Título II", "s": 11, "c": 12, "cat": "ESP", "pre": ["TIT1"] },
+            ],
+            "2024": [
+                { "id": "MAT1", "name": "Intro. a las Matemáticas", "s": 1, "c": 6, "cat": "CB", "pre": [] },
+                { "id": "FIS1", "name": "Intro. a la Física", "s": 1, "c": 6, "cat": "CB", "pre": [] },
+                { "id": "INTRO", "name": "Intro. Ing. Comp. e Inf.", "s": 1, "c": 4, "cat": "ESP", "pre": [] },
+                { "id": "FBVA1", "name": "Form. Básica Vida Acad. I", "s": 1, "c": 4, "cat": "CH", "pre": [] },
+                { "id": "ING1", "name": "Inglés I", "s": 1, "c": 4, "cat": "CH", "pre": [] },
+                { "id": "ALG1", "name": "Álgebra I", "s": 2, "c": 6, "cat": "CB", "pre": ["MAT1"] },
+                { "id": "CAL1", "name": "Cálculo I", "s": 2, "c": 6, "cat": "CB", "pre": ["MAT1"] },
+                { "id": "MEC", "name": "Mecánica", "s": 2, "c": 6, "cat": "CB", "pre": ["FIS1"] },
+                { "id": "FBVA2", "name": "Form. Básica Vida Acad. II", "s": 2, "c": 4, "cat": "CH", "pre": ["FBVA1"] },
+                { "id": "ING2", "name": "Inglés II", "s": 2, "c": 4, "cat": "CH", "pre": ["ING1"] },
+                { "id": "ALG2", "name": "Álgebra II", "s": 3, "c": 6, "cat": "CB", "pre": ["ALG1"] },
+                { "id": "CAL2", "name": "Cálculo II", "s": 3, "c": 6, "cat": "CB", "pre": ["CAL1"] },
+                { "id": "EYM", "name": "Electricidad y Magnetismo", "s": 3, "c": 6, "cat": "CB", "pre": ["MEC"] },
+                { "id": "PROG", "name": "Programación Computacional", "s": 3, "c": 6, "cat": "ESP", "pre": ["INTRO"] },
+                { "id": "INGC", "name": "Inglés Comunicacional", "s": 3, "c": 4, "cat": "CH", "pre": ["ING2"] },
+                { "id": "SELLO3", "name": "Sello Institucional III", "s": 3, "c": 2, "cat": "CH", "pre": [] },
+                { "id": "EDO", "name": "Ecuaciones Diferenciales", "s": 4, "c": 6, "cat": "CB", "pre": ["CAL2"] },
+                { "id": "CAL3", "name": "Cálculo III", "s": 4, "c": 6, "cat": "CB", "pre": ["CAL2"] },
+                { "id": "OND", "name": "Ondas, Óptica y Calor", "s": 4, "c": 6, "cat": "CB", "pre": ["EYM"] },
+                { "id": "POO", "name": "Prog. Orientada a Objetos", "s": 4, "c": 6, "cat": "ESP", "pre": ["PROG"] },
+                { "id": "TALL1", "name": "Taller Integrador I", "s": 4, "c": 4, "cat": "ESP", "pre": ["PROG"] },
+                { "id": "SELLO4", "name": "Sello Institucional IV", "s": 4, "c": 2, "cat": "CH", "pre": [] },
+                { "id": "PROB", "name": "Probabilidad y Estadística", "s": 5, "c": 6, "cat": "CB", "pre": ["CAL3"] },
+                { "id": "QUI", "name": "Química General", "s": 5, "c": 6, "cat": "CB", "pre": [] },
+                { "id": "ARQ", "name": "Arquitectura de Computadores", "s": 5, "c": 6, "cat": "ESP", "pre": ["PROG"] },
+                { "id": "EDD", "name": "Estructura de Datos", "s": 5, "c": 6, "cat": "ESP", "pre": ["POO"] },
+                { "id": "ADM", "name": "Administración", "s": 5, "c": 4, "cat": "CSSE", "pre": [] },
+                { "id": "INT", "name": "Interdisciplinar", "s": 5, "c": 3, "cat": "CH", "pre": [] },
+                { "id": "MET", "name": "Métodos Estadísticos", "s": 6, "c": 6, "cat": "CB", "pre": ["PROB"] },
+                { "id": "ECO", "name": "Fundamentos de Economía", "s": 6, "c": 4, "cat": "CSSE", "pre": ["ADM"] },
+                { "id": "SO", "name": "Sistemas Operativos", "s": 6, "c": 6, "cat": "ESP", "pre": ["ARQ"] },
+                { "id": "BD", "name": "Bases de Datos", "s": 6, "c": 6, "cat": "ESP", "pre": ["EDD"] },
+                { "id": "COMP", "name": "Complejidad de Algoritmos", "s": 6, "c": 6, "cat": "ESP", "pre": ["EDD"] },
+                { "id": "INTAS", "name": "Interdisciplinar A+S", "s": 6, "c": 3, "cat": "CH", "pre": ["INT"] },
+                { "id": "INV", "name": "Investigación Operativa", "s": 7, "c": 6, "cat": "ESP", "pre": ["MET"] },
+                { "id": "CONT", "name": "Contabilidad y Costos", "s": 7, "c": 4, "cat": "CSSE", "pre": ["ECO"] },
+                { "id": "RED", "name": "Redes y Sist. Distribuidos", "s": 7, "c": 6, "cat": "ESP", "pre": ["SO"] },
+                { "id": "TOP", "name": "Tópicos Avanzados de Datos", "s": 7, "c": 6, "cat": "ESP", "pre": ["BD"] },
+                { "id": "ANA", "name": "Análisis y Diseño Sist. Inf.", "s": 7, "c": 6, "cat": "ESP", "pre": ["BD"] },
+                { "id": "EVAL", "name": "Evaluación de Proyectos", "s": 8, "c": 6, "cat": "CSSE", "pre": ["CONT"] },
+                { "id": "CIB", "name": "Ciberseguridad", "s": 8, "c": 5, "cat": "ESP", "pre": ["RED"] },
+                { "id": "AUTO", "name": "Automatización", "s": 8, "c": 5, "cat": "ESP", "pre": ["ARQ"] },
+                { "id": "MIN", "name": "Minería de Datos", "s": 8, "c": 5, "cat": "ESP", "pre": ["TOP"] },
+                { "id": "IS", "name": "Ingeniería de Software", "s": 8, "c": 6, "cat": "ESP", "pre": ["ANA"] },
+                { "id": "TALL2", "name": "Taller Integrador II", "s": 8, "c": 5, "cat": "ESP", "pre": ["TALL1", "ANA"] },
+                { "id": "INN", "name": "Innovación y Emprendimiento", "s": 9, "c": 4, "cat": "CSSE", "pre": ["EVAL"] },
+                { "id": "TEC", "name": "Tecnologías Emergentes", "s": 9, "c": 4, "cat": "ESP", "pre": [] },
+                { "id": "IA", "name": "Inteligencia Artificial", "s": 9, "c": 6, "cat": "ESP", "pre": ["MIN"] },
+                { "id": "BIG", "name": "Proyecto Big Data", "s": 9, "c": 6, "cat": "ESP", "pre": ["MIN"] },
+                { "id": "GCAL", "name": "Gestión Calidad de Software", "s": 9, "c": 5, "cat": "ESP", "pre": ["IS"] },
+                { "id": "PRACOP", "name": "Práctica Operacional", "s": 9, "c": 0, "cat": "ESP", "pre": ["TALL2"] },
+                { "id": "TIT1", "name": "Proyecto de Título I", "s": 10, "c": 10, "cat": "ESP", "pre": ["TALL2", "IS"] },
+                { "id": "SINT", "name": "Sistemas Inteligentes", "s": 10, "c": 6, "cat": "ESP", "pre": ["IA"] },
+                { "id": "IGD", "name": "Ingeniería y Gobierno de Datos", "s": 10, "c": 6, "cat": "ESP", "pre": ["BIG"] },
+                { "id": "DIR", "name": "Dirección Proy. Informáticos", "s": 10, "c": 6, "cat": "CSSE", "pre": ["EVAL"] },
+                { "id": "TIT2", "name": "Proyecto de Título II", "s": 11, "c": 12, "cat": "ESP", "pre": ["TIT1"] },
+                { "id": "GEST", "name": "Gestión Planif. Estratégica", "s": 11, "c": 6, "cat": "CSSE", "pre": ["DIR"] },
+                { "id": "PROYINF", "name": "Proyecto de Informática", "s": 11, "c": 6, "cat": "ESP", "pre": [] },
+                { "id": "PRAC", "name": "Práctica Profesional", "s": 11, "c": 0, "cat": "ESP", "pre": ["PRACOP"] }
+            ]
+        }
+    };
+
+    // =========================================================
+    // 2. LÓGICA DE LA APLICACIÓN
+    // =========================================================
+    const app = {
+        data: [],
+        currentPlan: '2017',
+        approved: new Set(),
+
+        init: function() {
+            this.loadPlan('2017');
+            window.addEventListener('resize', () => this.autoFit());
+        },
+
+        loadPlan: function(planKey) {
+            this.currentPlan = planKey;
+            this.data = MALLA_DATA.planes[planKey];
+            this.approved.clear();
+            
+            const btns = document.querySelectorAll('.btn-malla');
+            btns.forEach(b => b.classList.remove('active'));
+            if(planKey === '2017') btns[0].classList.add('active');
+            else btns[1].classList.add('active');
+
+            document.getElementById('lbl-plan').innerText = `Plan ${planKey}`;
+            this.render();
+        },
+
+        render: function() {
+            const grid = document.getElementById('mainGrid');
+            grid.innerHTML = '';
+
+            const maxSem = Math.max(...this.data.map(r => r.s));
+            const totalYears = Math.ceil(maxSem / 2);
+
+            for (let y = 1; y <= totalYears; y++) {
+                grid.appendChild(this.buildYearBlock(y));
+            }
+
+            this.updateStats();
+            setTimeout(() => this.autoFit(), 50);
+        },
+
+        buildYearBlock: function(year) {
+            const semA = (year * 2) - 1;
+            const semB = year * 2;
+            const block = document.createElement('div');
+            block.className = 'year-block';
+
+            const header = document.createElement('div');
+            header.className = 'year-header';
+            header.innerText = `AÑO ${year}`;
+            header.title = "Clic para aprobar/desaprobar todo el año";
+            header.onclick = () => this.toggleYear(year);
+            block.appendChild(header);
+
+            const semsDiv = document.createElement('div');
+            semsDiv.className = 'year-semesters';
+            
+            if(this.hasSemester(semA)) semsDiv.appendChild(this.buildSemColumn(semA));
+            if(this.hasSemester(semB)) semsDiv.appendChild(this.buildSemColumn(semB));
+            else {
+                const spacer = document.createElement('div');
+                spacer.className = 'semester-column';
+                semsDiv.appendChild(spacer);
+            }
+            block.appendChild(semsDiv);
+            return block;
+        },
+
+        hasSemester: function(s) {
+            return this.data.some(r => r.s === s);
+        },
+
+        buildSemColumn: function(sem) {
+            const col = document.createElement('div');
+            col.className = 'semester-column';
+            col.innerHTML = `
+                <div class="semester-label" title="Clic para seleccionar semestre" onclick="app.toggleSemester(${sem})">
+                    SEMESTRE ${this.roman(sem)}
+                </div>
+            `;
+            const ramos = this.data.filter(r => r.s === sem);
+            ramos.forEach(r => col.appendChild(this.buildCard(r)));
+            return col;
+        },
+
+        buildCard: function(ramo) {
+            const style = this.getStyle(ramo);
+            const div = document.createElement('div');
+            div.className = `ramo ${style.text}`;
+            div.id = `card-${ramo.id}`;
+            div.style.backgroundColor = style.bg;
+            div.innerHTML = `
+                <div class="ramo-top">
+                    <div class="ramo-sigla">${ramo.id}</div>
+                    <div class="ramo-credits">${ramo.c}</div>
+                </div>
+                <div class="ramo-name">${ramo.name}</div>
+            `;
+            div.onclick = () => this.toggleRamo(ramo.id);
+            div.onmouseenter = () => this.highlight(ramo.id, true);
+            div.onmouseleave = () => this.highlight(ramo.id, false);
+            return div;
+        },
+
+        getStyle: function(r) {
+            const id = r.id; 
+            const cat = r.cat; 
+            const s = r.s;
+            if(['EST','ING1','COM','ING2','CTI1','INGC','CTI2','ETICA','FBVA1','FBVA2','SELLO3','SELLO4','INT','INTAS'].includes(id) || cat === 'CH') 
+                return { bg: "var(--col-human-lightgrey)", text: "dark-text" };
+            if(cat === 'CB') return { bg: "var(--col-cb-peach)", text: "dark-text" };
+            if(s >= 8 && id !== 'SIM' && id !== 'INV' && id !== 'EVAL') 
+                return { bg: "var(--col-app-grey)", text: "light-text" };
+            return { bg: "var(--col-esp-orange)", text: "light-text" };
+        },
+
+        toggleRamo: function(id) {
+            const r = this.data.find(x => x.id === id);
+            if(!r) return;
+            const preOk = r.pre.length === 0 || r.pre.every(p => this.approved.has(p));
+            if(!preOk && !this.approved.has(id)) return;
+
+            if(this.approved.has(id)) {
+                this.approved.delete(id);
+                this.cascadeRemove(id);
+            } else {
+                this.approved.add(id);
+            }
+            this.updateStats();
+        },
+
+        toggleYear: function(year) {
+            const s1 = (year*2)-1;
+            const s2 = year*2;
+            const ramos = this.data.filter(r => r.s === s1 || r.s === s2);
+            this.toggleBatch(ramos);
+        },
+
+        toggleSemester: function(sem) {
+            const ramos = this.data.filter(r => r.s === sem);
+            this.toggleBatch(ramos);
+        },
+
+        toggleBatch: function(ramos) {
+            const allApproved = ramos.every(r => this.approved.has(r.id));
+            if(allApproved) {
+                ramos.forEach(r => {
+                    if(this.approved.has(r.id)) {
+                        this.approved.delete(r.id);
+                        this.cascadeRemove(r.id);
+                    }
+                });
+            } else {
+                ramos.forEach(r => {
+                    this.addWithPrerequisites(r.id);
+                });
+            }
+            this.updateStats();
+        },
+
+        addWithPrerequisites: function(id) {
+            if(this.approved.has(id)) return;
+            this.approved.add(id);
+            const r = this.data.find(x => x.id === id);
+            if(!r) return;
+            r.pre.forEach(pId => {
+                this.addWithPrerequisites(pId);
+            });
+        },
+
+        cascadeRemove: function(id) {
+            const deps = this.data.filter(r => r.pre.includes(id));
+            deps.forEach(d => {
+                if(this.approved.has(d.id)) {
+                    this.approved.delete(d.id);
+                    this.cascadeRemove(d.id);
+                }
+            });
+        },
+
+        highlight: function(id, on) {
+            const currentRamo = this.data.find(r => r.id === id);
+            if (!currentRamo) return;
+
+            currentRamo.pre.forEach(preId => {
+                const el = document.getElementById(`card-${preId}`);
+                if(el) {
+                    if(on) el.classList.add('highlight-prereq');
+                    else el.classList.remove('highlight-prereq');
+                }
+            });
+
+            const unlocks = this.data.filter(r => r.pre.includes(id));
+            unlocks.forEach(unlockRamo => {
+                const el = document.getElementById(`card-${unlockRamo.id}`);
+                if(el) {
+                    if(on) el.classList.add('highlight-next');
+                    else el.classList.remove('highlight-next');
+                }
+            });
+        },
+
+        updateStats: function() {
+            let total = 0, appC = 0;
+            this.data.forEach(r => {
+                const el = document.getElementById(`card-${r.id}`);
+                if(!el) return;
+                const isApp = this.approved.has(r.id);
+                const preOk = r.pre.length === 0 || r.pre.every(p => this.approved.has(p));
+                
+                el.classList.remove('locked','available','approved');
+                if(isApp) {
+                    el.classList.add('approved');
+                    appC += r.c;
+                } else if(preOk) {
+                    el.classList.add('available');
+                } else {
+                    el.classList.add('locked');
+                }
+                total += r.c;
+            });
+            document.getElementById('lbl-credits').innerText = appC;
+            const pct = total > 0 ? Math.round((appC/total)*100) : 0;
+            document.getElementById('lbl-progress').innerText = `${pct}%`;
+        },
+
+        reset: function() {
+            this.approved.clear();
+            this.updateStats();
+        },
+
+        roman: function(n) {
+            return ["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII","XIII"][n-1] || n;
+        },
+
+        // --- FUNCION AUTOFIT CORREGIDA PARA ALTURA ---
+        autoFit: function() {
+            const wrapper = document.getElementById('scalableWrapper');
+            const grid = document.getElementById('mainGrid');
+            const viewport = document.getElementById('viewport');
+            
+            if(!wrapper || !grid || !viewport) return;
+
+            // Restablecer para medir
+            wrapper.style.transform = `scale(1)`;
+            
+            // Medir dimensiones disponibles
+            const viewW = viewport.clientWidth;
+            const viewH = viewport.clientHeight;
+            
+            // Medir contenido
+            const contentW = grid.scrollWidth;
+            const contentH = grid.scrollHeight;
+
+            // Padding de seguridad
+            const padX = 20;
+            const padY = 20;
+
+            const availableW = viewW - padX;
+            const availableH = viewH - padY;
+
+            // Calcular escala en ambos ejes
+            const scaleX = availableW / contentW;
+            const scaleY = availableH / contentH;
+
+            // Usar la escala MENOR para que quepa en ambos sentidos
+            // Y no permitir que la escala sea mayor a 1 si el contenido es pequeño (opcional, aquí permito zoom out solo)
+            let scale = Math.min(scaleX, scaleY);
+            
+            // Si quieres que el contenido pequeño NO se agrande, usa: Math.min(scaleX, scaleY, 1);
+            // Si quieres que llene la pantalla siempre: Math.min(scaleX, scaleY);
+            
+            wrapper.style.transform = `scale(${scale})`;
+            wrapper.style.width = `${contentW}px`; // Fijar ancho para centrado correcto
+            
+            // Ajuste fino para centrado vertical si sobra espacio
+            // No necesario si el viewport es flex center center
+        }
+    };
+
+    app.init();
+</script>
+</body>
+</html>
